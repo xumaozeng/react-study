@@ -1,7 +1,9 @@
+import MyRCFieldForm from "./pages/MyRCFieldForm";
+
 function App() {
   return (
     <div>
-      <h3>React Context</h3>
+      <MyRCFieldForm />
     </div>
   );
 }

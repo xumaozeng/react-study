@@ -5,7 +5,7 @@ const Input = props => {
 };
 
 const CustomizeInput = ({ value = "", ...props }) => (
-  <div style={{ padding: 10 }}>
+  <div style={{ paddingBottom: 10 }}>
     <Input style={{ outline: "none" }} value={value} {...props} />
   </div>
 );
