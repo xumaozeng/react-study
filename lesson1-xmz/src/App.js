@@ -1,9 +1,11 @@
-import MyRCFieldForm from "./pages/MyRCFieldForm";
+// import MyRCFieldForm from "./pages/MyRCFieldForm";
+import ReduxPage from "./pages/ReduxPage";
 
 function App() {
   return (
     <div>
-      <MyRCFieldForm />
+      {/* <MyRCFieldForm /> */}
+      <ReduxPage />
     </div>
   );
 }
