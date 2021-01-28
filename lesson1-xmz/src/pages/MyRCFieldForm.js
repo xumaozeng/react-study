@@ -18,7 +18,7 @@ function MyRCFieldForm() {
 
   useEffect(() => {
     console.log("form", form);
-    // form.setFieldsValue({ username: "default" }); // 设置初始值
+    form.setFieldsValue({ username: "default" }); // 设置初始值
   });
   return (
     <div>
@@ -36,3 +36,7 @@ function MyRCFieldForm() {
   );
 }
 export default MyRCFieldForm;
+
+
+// antd3 form 存到了form state中
+// antd4 form 存到了一个数据仓库 set存 get取值

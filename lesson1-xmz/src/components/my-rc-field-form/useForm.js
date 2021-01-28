@@ -108,12 +108,17 @@ class FormStore {
   };
 }
 
-function useForm(props) {
+function useForm(form) {
   // 保证始终用到同一个对象
   const formRef = React.useRef();
   if (!formRef.current) {
-    const forStore = new FormStore();
-    formRef.current = forStore.getForm();
+    if (form) {
+      // 默认值
+      formRef.current = form;
+    } else {
+      const forStore = new FormStore();
+      formRef.current = forStore.getForm();
+    }
   }
   return [formRef.current];
 }

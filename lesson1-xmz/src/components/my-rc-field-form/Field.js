@@ -52,4 +52,53 @@ class Field extends Component {
     return returnChildNode;
   }
 }
+
+// function Field(props) {
+//   // 获取context对象
+//   const fieldContext = useContext(FieldContext);
+//   const [, forceUpdate] = useReducer();
+//   const formRef = useRef();
+
+//   useEffect(() => {
+//     console.log(formRef);
+//     const unRegister = fieldContext.setFieldEntities(formRef.current);
+
+//     getRules();
+//     return () => {
+//       unRegister();
+//     };
+//   });
+//   // 存取rules
+//   function getRules() {
+//     const { name, rules } = props;
+//     const { setRules } = fieldContext;
+//     setRules({ [name]: rules });
+//   }
+
+//   /* eslint-disable-next-line*/
+//   function onStoreChange() {
+//     // 强制更新组件
+//     // this.forceUpdate(); // hook中替换
+//     forceUpdate();
+//   }
+
+//   function getControlled() {
+//     const { name } = props;
+//     const { getFieldValue, setFieldsValue } = fieldContext;
+//     return {
+//       value: getFieldValue(name), // get
+//       onChange: e => {
+//         // set
+//         const newValue = e.target.value;
+//         setFieldsValue({ [name]: newValue });
+//         console.log("newValue", newValue);
+//       },
+//       ref: formRef
+//     };
+//   }
+//   const { children } = props;
+//   // 克隆组件，给其加一些属性在返回，使Field=>Input变成受控组件
+//   const returnChildNode = React.cloneElement(children, getControlled());
+//   return returnChildNode;
+// }
 export default Field;
