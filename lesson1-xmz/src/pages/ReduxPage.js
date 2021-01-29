@@ -18,13 +18,25 @@ class ReduxPage extends Component {
   add = () => {
     store.dispatch({ type: "ADD", payload: 100 });
   };
+
+  // 异步
+  asyAdd = () => {
+    store.dispatch((dispatch, getState) => {
+      setTimeout(() => {
+        // 修改状态
+        dispatch({ type: "ADD", payload: 20 });
+      }, 1000);
+    });
+  };
+
   render() {
-    console.log(store);
+    // console.log(store);
     return (
       <div>
         <h3>ReduxPage</h3>
-        <div>{store.getState()}</div>
+        <div>{store.getState().count}</div>
         <button onClick={this.add}>add</button>
+        <button onClick={this.asyAdd}>asyAdd</button>
       </div>
     );
   }

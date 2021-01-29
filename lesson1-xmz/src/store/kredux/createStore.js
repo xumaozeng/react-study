@@ -1,4 +1,10 @@
-export default function createStore(reducer) {
+export default function createStore(reducer, enhancer) {
+  // 如果存在中间件则执行以下
+  if(enhancer){
+    return enhancer(createStore)(reducer);
+  }
+
+
   let currentState; // 初始为null 默认值没有作用(state为undefined走default,内部采用严格相等模式)
   let currentListeners = [];
 
@@ -23,8 +29,9 @@ export default function createStore(reducer) {
     };
   }
 
-  // state默认值
+  // 初始化的时候执行下dispatch，设置初始值
   dispatch({ type: "REDUXXXXXXX" });
+
   return {
     getState,
     dispatch,
