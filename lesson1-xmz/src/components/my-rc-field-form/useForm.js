@@ -5,16 +5,7 @@ class FormStore {
     this.store = {}; // 数据仓库
     this.fieldEntities = []; // 组件实例数组
     this.callbacks = {}; // 保存成功和失败回调函数
-    this.rules = {}; // 校验信息
   }
-
-  // 存取rules
-  setRules = newRules => {
-    this.rules = {
-      ...this.rules,
-      ...newRules
-    };
-  };
 
   // 存取回调函数-成功或失败
   setCallbacks = newCallbacks => {
@@ -69,13 +60,17 @@ class FormStore {
   validate = () => {
     let err = [];
     // todo 实现基础校验，比如只要输入了信息就通过
-    for (let fieldName in this.rules) {
-      if (this.store[fieldName] === undefined) {
+    this.fieldEntities.forEach(field => {
+      const { name, rules } = field.props;
+      let rule = rules && rules[0];
+      let value = this.getFieldValue(name);
+      if (rule && rule.required && (value === undefined || value === "")) {
         err.push({
-          [fieldName]: this.rules[fieldName][0].message
+          [name]: rule.message,
+          value
         });
       }
-    }
+    });
     return err;
   };
 

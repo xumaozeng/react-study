@@ -9,8 +9,6 @@ class Field extends Component {
     // 注册和取消注册要成对出现、订阅也一样
     // 返回一个取消注册函数
     this.unRegister = this.context.setFieldEntities(this);
-
-    this.getRules();
   }
 
   componentWillUnmount() {
@@ -19,13 +17,6 @@ class Field extends Component {
       this.unRegister();
     }
   }
-
-  // 存取rules
-  getRules = () => {
-    const { name, rules } = this.props;
-    const { setRules } = this.context;
-    setRules({ [name]: rules });
-  };
 
   onStoreChange = () => {
     // 强制更新组件
@@ -63,18 +54,10 @@ class Field extends Component {
 //     console.log(formRef);
 //     const unRegister = fieldContext.setFieldEntities(formRef.current);
 
-//     getRules();
 //     return () => {
 //       unRegister();
 //     };
 //   });
-//   // 存取rules
-//   function getRules() {
-//     const { name, rules } = props;
-//     const { setRules } = fieldContext;
-//     setRules({ [name]: rules });
-//   }
-
 //   /* eslint-disable-next-line*/
 //   function onStoreChange() {
 //     // 强制更新组件
