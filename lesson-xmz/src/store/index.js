@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, combineReducers } from "./kredux";
 // import thunk from "redux-thunk"; // 处理异步
 // import logger from "redux-logger"; // 打印日志
 
-function countReducer(state = 0, { type, payload }) {
+export function countReducer(state = 0, { type, payload }) {
   switch (type) {
     case "ADD":
       return state + payload;
@@ -19,8 +19,6 @@ const store = createStore(
   combineReducers({ count: countReducer }), // 多个reducer处理
   applyMiddleware(thunk, logger)
 );
-
-export default store;
 
 // 手写一个thunk，处理异步的thunk
 function thunk({ getState, dispatch }) {
@@ -51,3 +49,5 @@ function logger({ getState, dispatch }) {
     return returnValue;
   };
 }
+
+export default store;
