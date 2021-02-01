@@ -1,9 +1,9 @@
-import ReactReduxPage from "./pages/ReactReduxPage";
+const { default: ReactReduxHookPage } = require("./pages/ReactReduxHookPage");
 
 function App() {
   return (
     <div>
-      <ReactReduxPage />
+      <ReactReduxHookPage />
     </div>
   );
 }

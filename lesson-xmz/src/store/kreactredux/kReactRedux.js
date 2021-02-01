@@ -20,7 +20,7 @@ export const connect = (
   mapDispatchToProps // object|function
 ) => WrappedComponent => props => {
   // 获取store
-  const store = useContext(Context);
+  const store = useStore();
   const { getState, dispatch, subscribe } = store;
   const stateProps = mapStateToProps(getState());
   let dispatchProps = { dispatch }; // 默认
@@ -78,4 +78,38 @@ function useForceUpdate() {
   // 使用useCallback做缓存函数
   const update = useCallback(() => setState(prev => prev + 1), []);
   return update;
+}
+
+// hooks
+
+// set
+export function useDispatch() {
+  const { dispatch } = useStore();
+  return dispatch;
+}
+
+// get
+export function useSelector(selector) {
+  const store = useStore();
+  const { getState, subscribe } = store;
+  const selectorState = selector(getState());
+
+  // 订阅更新
+  const forceUpdate = useForceUpdate();
+  useLayoutEffect(() => {
+    const unsubscribe = subscribe(() => {
+      forceUpdate();
+    });
+    return () => {
+      unsubscribe();
+    };
+    // eslint-disable-next-line
+  }, [store]);
+
+  return selectorState;
+}
+
+function useStore() {
+  const store = useContext(Context);
+  return store;
 }
