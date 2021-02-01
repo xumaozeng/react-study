@@ -1,9 +1,9 @@
-const { default: ReactReduxHookPage } = require("./pages/ReactReduxHookPage");
+import MyRCFieldForm from "./pages/MyRCFieldForm";
 
 function App() {
   return (
     <div>
-      <ReactReduxHookPage />
+      <MyRCFieldForm />
     </div>
   );
 }
