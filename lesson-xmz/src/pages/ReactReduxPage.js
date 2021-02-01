@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+// import { connect } from "react-redux";
+// import { bindActionCreators } from "redux";
+import { bindActionCreators, connect } from "../store/kreactredux/kReactRedux";
 
 class ReactReduxPage extends Component {
   render() {
@@ -23,7 +24,11 @@ class ReactReduxPage extends Component {
 // hoc是个函数，接收组件作为参数，返回一个新的组件
 // connect原理 高阶组件(hoc)
 // mapStateToProps(function)把state map(映射) props上一份
-const mapStateToProps = ({ count }) => ({ count });
+const mapStateToProps =
+  // ({ count }) => ({ count }); // 这是对象解构
+  state => {
+    return { count: state.count };
+  };
 
 // mapDispatchToProps(function|object)把方法映射到 props上一份
 const mapDispatchToProps =
