@@ -3,7 +3,8 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Link,
-  Route
+  Route,
+  Switch
 } from "../../store/kreactrouterdom";
 import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
@@ -20,19 +21,19 @@ function RouterPage() {
         <Link to="/product/123">商品</Link>
 
         {/* 独占路由 */}
-        {/* <Switch> */}
-        <Route
-          path="/"
-          exact
-          //   children={children}
-          component={HomePage}
-          //   render={render}
-        />
-        <Route path="/user" component={UserPage} />
-        <Route path="/login" component={LoginPage} />
-        {/* <Route path="/product/:id" component={ProductPage} /> */}
-        <Route render={() => <h3>404 not found</h3>} />
-        {/* </Switch> */}
+        <Switch>
+          <Route
+            path="/"
+            exact
+            // children={children}
+            component={HomePage}
+            //   render={render}
+          />
+          <Route path="/user" component={UserPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/product/:id" component={ProductPage} />
+          <Route render={() => <h3>404 not found</h3>} />
+        </Switch>
       </Router>
     </div>
   );

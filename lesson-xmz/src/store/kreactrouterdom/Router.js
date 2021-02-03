@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import RouterContext from "./RouterContext";
 
+function computeRootMatch(pathname) {
+  return { path: "/", url: "/", params: {}, isExact: pathname === "/" };
+}
+
 function Router(props) {
   const { children, history } = props;
   const [location, setLocation] = useState(history.location);
@@ -18,7 +22,9 @@ function Router(props) {
   });
 
   return (
-    <RouterContext.Provider value={{ history, location }}>
+    <RouterContext.Provider
+      value={{ history, location, match: computeRootMatch(location.pathname) }}
+    >
       {children}
     </RouterContext.Provider>
   );
