@@ -1,9 +1,9 @@
-import MyRCFieldForm from "./pages/MyRCFieldForm";
+import RouterPage from "./pages/Routes";
 
 function App() {
   return (
     <div>
-      <MyRCFieldForm />
+      <RouterPage />
     </div>
   );
 }
