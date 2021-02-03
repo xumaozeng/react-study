@@ -3,6 +3,7 @@ import Route from "./Route";
 import Link from "./Link";
 import Switch from "./Switch";
 import Redirect from "./Redirect";
+import Prompt from "./Prompt";
 import { useHistory, useLocation, useParams, useRouteMatch } from "./hooks";
 
 export {
@@ -14,5 +15,6 @@ export {
   useLocation,
   useParams,
   useRouteMatch,
-  Redirect
+  Redirect,
+  Prompt
 };

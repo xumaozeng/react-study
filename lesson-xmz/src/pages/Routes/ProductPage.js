@@ -1,8 +1,15 @@
-import React from "react";
-import { Link, Route, useRouteMatch } from "../../store/kreactrouterdom";
+import React, { useState } from "react";
+// import { Link, Route, useRouteMatch, Prompt } from "react-router-dom";
+import {
+  Link,
+  Route,
+  useRouteMatch,
+  Prompt
+} from "../../store/kreactrouterdom";
 
 function ProductPage() {
-  // const [confirm, setConfirm] = useState(true);
+  // eslint-disable-next-line
+  const [confirm, setConfirm] = useState(true);
   const match = useRouteMatch();
   console.log("match", match);
   const { params, url } = match;
@@ -13,12 +20,12 @@ function ProductPage() {
       <Link to={url + "/detail"}>详情</Link>
       <Route path={url + "/detail"} component={Detail} />
 
-      {/* <Prompt
+      <Prompt
         when={confirm}
         message={location => {
           return "Are you sure you want to leave-fun";
         }}
-      /> */}
+      />
     </div>
   );
 }
