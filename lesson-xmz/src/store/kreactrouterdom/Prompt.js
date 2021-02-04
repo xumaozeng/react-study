@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import LifeCycle from "./LifeCycle";
 import RouterContext from "./RouterContext";
 
 function Prompt({ message, when = true }) {
@@ -23,17 +23,3 @@ function Prompt({ message, when = true }) {
   );
 }
 export default Prompt;
-
-class LifeCycle extends Component {
-  componentDidMount() {
-    if (this.props.onMount) this.props.onMount.call(this, this);
-  }
-
-  componentWillUnmount() {
-    if (this.props.onUnmount) this.props.onUnmount.call(this, this);
-  }
-
-  render() {
-    return null;
-  }
-}

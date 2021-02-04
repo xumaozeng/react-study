@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import LifeCycle from "./LifeCycle";
 import RouterContext from "./RouterContext";
 
 function Redirect(props) {
@@ -19,14 +19,3 @@ function Redirect(props) {
   );
 }
 export default Redirect;
-
-class LifeCycle extends Component {
-  componentDidMount() {
-    if (this.props.onMount) {
-      this.props.onMount.call(this, this);
-    }
-  }
-  render() {
-    return null;
-  }
-}

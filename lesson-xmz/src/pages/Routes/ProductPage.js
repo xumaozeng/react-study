@@ -8,7 +8,6 @@ import {
 } from "../../store/kreactrouterdom";
 
 function ProductPage() {
-  // eslint-disable-next-line
   const [confirm, setConfirm] = useState(true);
   const match = useRouteMatch();
   console.log("match", match);
@@ -17,6 +16,7 @@ function ProductPage() {
   return (
     <div>
       <h3>Product-{id}</h3>
+      <button onClick={() => setConfirm(false)}>change</button>
       <Link to={url + "/detail"}>详情</Link>
       <Route path={url + "/detail"} component={Detail} />
 
