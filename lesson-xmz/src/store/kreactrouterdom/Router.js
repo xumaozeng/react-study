@@ -12,7 +12,7 @@ class Router extends Component {
     };
 
     // 监听location变化
-    this.unlisten = props.history.listen(({ location }) => {
+    this.unlisten = props.history.listen(location => {
       this.setState({ location });
     });
   }

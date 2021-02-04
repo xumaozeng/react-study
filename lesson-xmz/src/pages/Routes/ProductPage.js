@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import {
   Link,
   Route,
-  useRouteMatch
-  // Prompt
+  useRouteMatch,
+  Prompt
 } from "../../store/kreactrouterdom";
 
 function ProductPage() {
@@ -20,12 +20,12 @@ function ProductPage() {
       <Link to={url + "/detail"}>详情</Link>
       <Route path={url + "/detail"} component={Detail} />
 
-      {/* <Prompt
+      <Prompt
         when={confirm}
         message={location => {
           return "Are you sure you want to leave-fun";
         }}
-      /> */}
+      />
     </div>
   );
 }
