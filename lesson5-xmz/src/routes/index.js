@@ -32,21 +32,20 @@ function Routes(props) {
       <Link to="/">首页</Link>
       <Link to="/user">用户中心</Link>
       <Link to="/login">登录</Link>
-      <Link to="/product">商品页面</Link>
 
       <Switch>
-        {routes.map(props => {
+        {/* {routes.map(props => {
           if (props.auth) {
             const { auth, ...restProps } = props;
             return <PrivateRoute {...restProps} />;
           } else {
             return <Route {...props} />;
           }
-        })}
-        {/* <Route exact path="/" component={HomePage} />
+        })} */}
+        <Route exact path="/" component={HomePage} />
         <Route path="/login" component={LoginPage} />
         <PrivateRoute path="/user" component={UserPage} />
-        <Route component={_404Page} /> */}
+        <Route component={_404Page} />
       </Switch>
     </Router>
   );
