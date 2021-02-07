@@ -31,7 +31,7 @@ class LoginPage extends Component {
       return <Redirect to={redirect} />;
     }
 
-    // console.log("isLogin", this.props);
+    console.log("isLogin", this.props);
 
     const { name } = this.state;
     return (
@@ -40,7 +40,7 @@ class LoginPage extends Component {
         <input value={name} onChange={this.onChange} />
         <p className="red">{err.msg}</p>
         <button onClick={() => login({ name })}>
-          {loading ? "loading..." : "click"}
+          {loading ? "loading..." : "login"}
         </button>
       </div>
     );

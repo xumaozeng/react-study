@@ -1,5 +1,5 @@
 // import LoginService from "../service/login";
-import { LOGIN_SAGA } from "./const";
+import { LOGIN_SAGA, LOGOUT_SUCCESS } from "./const";
 
 // 同步
 // export const login = useInfo => ({ type: "LOGIN_SUCCESS", payload: useInfo });
@@ -62,6 +62,8 @@ export function login(userInfo) {
     }
   };
 } */
+
+export const logout = () => ({ type: LOGOUT_SUCCESS });
 
 // 方案3：redux-saga
 export const login = userInfo => ({ type: LOGIN_SAGA, payload: userInfo });
