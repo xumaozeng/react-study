@@ -28,8 +28,10 @@ function createNode(vnode) {
     node = updateHostComponent(vnode);
   } else if (typeof type === "function") {
     node = type.prototype.isReactComponent
-      ? updateClassComponent(vnode)
-      : updateFunctionComponent(vnode);
+      ? // 类组件
+        updateClassComponent(vnode)
+      : // 函数组件
+        updateFunctionComponent(vnode);
   } else if (type === undefined) {
     // 文本
     node = updateTextComponent(vnode);
