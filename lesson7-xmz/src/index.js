@@ -7,7 +7,7 @@ import "./index.css";
 function FunctionComponent(props) {
   return (
     <div className="border">
-      <p>{props.name}</p>
+      <p>函数组件{props.name}</p>
     </div>
   );
 }
