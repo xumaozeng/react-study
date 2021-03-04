@@ -6,8 +6,8 @@
 // 根节点 fiber
 let wipRoot = null;
 function render(vnode, container) {
-  /* console.log("vnode", vnode);
-  // vnode->node
+  // console.log("vnode", vnode);
+  /*  // vnode->node
   const node = createNode(vnode);
   // node 插入到container中
   container.appendChild(node); */
@@ -19,6 +19,7 @@ function render(vnode, container) {
   };
 
   nextUnitWork = wipRoot;
+  console.log("netUnitWork", nextUnitWork);
 }
 
 function isString(str) {
@@ -65,7 +66,7 @@ function updateHostComponent(workInProgress) {
   // 齐家
   // 协调子节点
   reconcileChildren(workInProgress, workInProgress.props.children);
-  console.log("workInProgress", workInProgress);
+  // console.log("workInProgress", workInProgress);
 }
 
 // 文本
