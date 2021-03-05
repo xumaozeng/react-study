@@ -3,8 +3,12 @@
  * node　真实DOM
  */
 
+import { Placement, Update } from "./const";
+
 // 根节点 fiber
 let wipRoot = null;
+let currentRoot = null;
+
 function render(vnode, container) {
   // console.log("vnode", vnode);
   /*  // vnode->node
@@ -19,38 +23,52 @@ function render(vnode, container) {
   };
 
   nextUnitWork = wipRoot;
-  console.log("netUnitWork", nextUnitWork);
+  // console.log("netUnitWork", nextUnitWork);
 }
 
-function isString(str) {
-  return typeof str === "string";
+function isStringOrNumber(str) {
+  return typeof str === "string" || typeof str === "number";
 }
 
 // 根据vnode,生成node
 function createNode(workInProgress) {
   let node = document.createElement(workInProgress.type);
-  updateNode(node, workInProgress.props);
+  updateNode(node, {}, workInProgress.props);
 
   return node;
 }
 
-// 更新属性
-function updateNode(node, nextVal) {
+// 更新原生标签的属性，如className,href,id,(style,事件等)
+function updateNode(node, prevVal, nextVal) {
+  Object.keys(prevVal).forEach(k => {
+    if (k === "children") {
+      // 有可能是文本
+      if (isStringOrNumber(prevVal[k])) {
+        node.textContent = "";
+      }
+    } else if (k.slice(0, 2) === "on") {
+      const eventName = k.slice(2).toLocaleLowerCase();
+      node.removeEventListener(eventName, prevVal[k]);
+    } else {
+      if (!(k in nextVal)) {
+        node[k] = "";
+      }
+    }
+  });
+
   Object.keys(nextVal)
     // .filter(k => k !== "children")
     .forEach(k => {
       if (k === "children") {
-        if (isString(nextVal.children)) {
-          node.textContent = nextVal.children;
+        // 有可能是文本
+        if (isStringOrNumber(nextVal[k])) {
+          node.textContent = nextVal[k] + "";
         }
+      } else if (k.slice(0, 2) === "on") {
+        const eventName = k.slice(2).toLocaleLowerCase();
+        node.addEventListener(eventName, nextVal[k]);
       } else {
-        if (k === "style") {
-          for (let attr in nextVal.style) {
-            node.style[attr] = nextVal.style[attr];
-          }
-        } else {
-          node[k] = nextVal[k];
-        }
+        node[k] = nextVal[k];
       }
     });
 }
@@ -78,6 +96,11 @@ function updateTextComponent(workInProgress) {
 
 // 函数组件
 function updateFunctionComponent(workInProgress) {
+  // 当前正在工作的fiber以及hook的初始化
+  currentlyRenderingFiber = workInProgress;
+  currentlyRenderingFiber.memoizedState = null; // 存取Hook
+  workInProgressHook = null;
+
   const { type, props } = workInProgress;
   const children = type(props);
   reconcileChildren(workInProgress, children);
@@ -99,26 +122,61 @@ function updateFragmentComponent(workInProgress) {
 
 // 最假的吧，最简单的也是协调
 function reconcileChildren(workInProgress, children) {
-  if (isString(children)) {
+  if (isStringOrNumber(children)) {
     return;
   }
   let newChildren = Array.isArray(children) ? children : [children];
 
   let previousNewFiber = null;
+  let oldFiber = workInProgress.alternate && workInProgress.alternate.child;
   for (let i = 0; i < newChildren.length; i++) {
     let child = newChildren[i];
-    // 构建fiber节点
-    let newFiber = {
-      type: child.type, // 类型
-      props: { ...child.props }, // 属性
-      stateNode: null, // 如果是原生标签代表dom节点，如果是类组件就代表实例
-      child: null, // 第一个子节点fiber
-      sibling: null, // 下一个兄弟节点 fiber
-      return: workInProgress // 父节点
-    };
 
-    if (isString(child)) {
+    let same =
+      child &&
+      oldFiber &&
+      // child.key === oldFiber.key &&
+      child.type === oldFiber.type;
+
+    let newFiber;
+    if (same) {
+      // 节点复用
+      newFiber = {
+        type: child.type, // 类型
+        props: { ...child.props }, // 属性
+        stateNode: oldFiber.stateNode, // 如果是原生标签代表dom节点，如果是类组件就代表实例
+        child: null, // 第一个子节点fiber
+        sibling: null, // 下一个兄弟节点 fiber
+        return: workInProgress, // 父节点
+        alternate: oldFiber, // 上一次fiber
+        flags: Update
+      };
+    }
+
+    if (!same && child) {
+      // 构建fiber节点
+      newFiber = {
+        type: child.type, // 类型
+        props: { ...child.props }, // 属性
+        stateNode: null, // 如果是原生标签代表dom节点，如果是类组件就代表实例
+        child: null, // 第一个子节点fiber
+        sibling: null, // 下一个兄弟节点 fiber
+        return: workInProgress, // 父节点
+        alternate: null, // 上一次fiber
+        flags: Placement
+      };
+    }
+
+    if (!same && oldFiber) {
+      // 删除
+    }
+
+    if (isStringOrNumber(child)) {
       newFiber.props = child;
+    }
+
+    if (oldFiber) {
+      oldFiber = oldFiber.sibling;
     }
 
     if (i === 0) {
@@ -141,13 +199,14 @@ function reconcileChildren(workInProgress, children) {
  * child 第一个子节点
  * sibling 下一个兄弟节点
  * return 指向父节点
+ * alternate 上一次fiber
  */
 
 // workInProgress当前正在进行的中的fiber
 function performNextUnitWork(workInProgress) {
   // step1 执行当前任务
   const { type } = workInProgress;
-  if (isString(type)) {
+  if (isStringOrNumber(type)) {
     // 原生标签
     updateHostComponent(workInProgress);
   } else if (typeof type === "function") {
@@ -199,8 +258,12 @@ function workLoop(IdleDeadline) {
   requestIdleCallback(workLoop);
 }
 
+// 在浏览器的空闲时间段内调用的函数排队
+requestIdleCallback(workLoop);
+
 function commitRoot() {
   commitWorker(wipRoot.child);
+  currentRoot = wipRoot;
   wipRoot = null;
 }
 
@@ -216,8 +279,14 @@ function commitWorker(workInProgress) {
   }
 
   let parentNode = parentNodeFiber.stateNode;
-  if (workInProgress.stateNode) {
+  if (workInProgress.flags & Placement && workInProgress.stateNode) {
     parentNode.appendChild(workInProgress.stateNode);
+  } else if (workInProgress.flags & Update && workInProgress.stateNode) {
+    updateNode(
+      workInProgress.stateNode,
+      workInProgress.alternate.props,
+      workInProgress.props
+    );
   }
 
   // 更新子节点
@@ -226,8 +295,68 @@ function commitWorker(workInProgress) {
   commitWorker(workInProgress.sibling);
 }
 
-// 在浏览器的空闲时间段内调用的函数排队
-requestIdleCallback(workLoop);
+// 当前正在工作的fiber
+let currentlyRenderingFiber = null;
+
+// 当前正在工作的hook
+let workInProgressHook = null;
+
+// 一个hook函数
+export function useState(initialState) {
+  let hook;
+  // 判断是否是组件初次渲染
+  if (currentlyRenderingFiber.alternate) {
+    // 不是初次渲染，是更新阶段
+    currentlyRenderingFiber.memoizedState =
+      currentlyRenderingFiber.alternate.memoizedState;
+
+    if (workInProgressHook) {
+    } else {
+      // 是第一个hook
+      workInProgressHook = currentlyRenderingFiber.memoizedState;
+    }
+
+    hook = workInProgressHook;
+  } else {
+    // 初次渲染
+    hook = {
+      memoizedState: initialState, // 状态值
+      queue: [], // 批量更新数组存取
+      next: null // 下一个hook
+    };
+
+    if (workInProgressHook) {
+      // 不是第一个hook
+      hook = workInProgressHook;
+    } else {
+      // 是第一个hook，挂到fiber节点上
+      currentlyRenderingFiber.memoizedState = workInProgressHook = hook;
+    }
+  }
+
+  // 模拟批量处理
+  hook.queue.forEach(action => (hook.memoizedState = action));
+
+  const dispatch = action => {
+    hook.queue.push(action);
+
+    wipRoot = {
+      type: currentRoot.type,
+      stateNode: currentRoot.stateNode,
+      props: currentRoot.props,
+      alternate: currentRoot
+    };
+
+    nextUnitWork = wipRoot;
+
+    // console.log("action", action);
+  };
+
+  // 指向下一个hook
+  workInProgressHook = workInProgressHook.next;
+
+  return [hook.memoizedState, dispatch];
+}
 
 // eslint-disable-next-line
 export default { render };

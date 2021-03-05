@@ -1,13 +1,16 @@
 // import React from "react";
 // import ReactDOM from "react-dom";
-import ReactDOM from "./kreact/react-dom";
+import ReactDOM, { useState } from "./kreact/react-dom";
 import Component from "./kreact/Component";
 import "./index.css";
 
 function FunctionComponent(props) {
+  const [count, setCount] = useState(0);
+  console.log("count", count, typeof count);
   return (
     <div className="border">
-      <p>函数组件{props.name}</p>
+      <p>{props.name}</p>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
     </div>
   );
 }
