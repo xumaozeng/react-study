@@ -30,7 +30,7 @@ function MyRCFieldForm() {
         <Field name="password" rules={[passwordRules]}>
           <Input placeholder="输入密码" />
         </Field>
-        <button>Submit</button>
+        <button>提交</button>
       </Form>
     </div>
   );
