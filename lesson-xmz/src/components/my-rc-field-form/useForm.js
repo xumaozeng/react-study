@@ -97,8 +97,7 @@ class FormStore {
       setFieldsValue: this.setFieldsValue,
       setFieldEntities: this.setFieldEntities,
       submit: this.submit,
-      setCallbacks: this.setCallbacks,
-      setRules: this.setRules
+      setCallbacks: this.setCallbacks
     };
   };
 }
